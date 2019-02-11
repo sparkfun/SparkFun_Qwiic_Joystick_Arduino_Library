@@ -23,7 +23,7 @@ Repository Contents
 
 Documentation
 --------------
-* **[Qwiic Joystick Hookup Guide](https://learn.sparkfun.com/tutorials/qwiic-joystick-hoookup-guide)** - Hookup guide for the Qwiic Joystick
+* **[Qwiic Joystick Hookup Guide](https://learn.sparkfun.com/tutorials/qwiic-joystick-hookup-guide)** - Hookup guide for the Qwiic Joystick
 * **[Installing an Arduino Library Guide](https://learn.sparkfun.com/tutorials/installing-an-arduino-library)** - Basic information on how to install an Arduino library.
 * **[Product Repository](https://github.com/sparkfun/Qwiic_Joystick)** - Main repository (including hardware files)
 
