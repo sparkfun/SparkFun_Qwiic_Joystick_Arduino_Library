@@ -1,17 +1,18 @@
 /*
-  This is a library written for the SparkFun Qwiic Joystick Encoder
+  This is a library written for the SparkFun Qwiic Joystick
   SparkFun sells these at its website: www.sparkfun.com
   Do you like this library? Help support SparkFun. Buy a board!
-  https://www.sparkfun.com/products/15083
+  https://www.sparkfun.com/products/15168
 
   Written by Nathan Seidle @ SparkFun Electronics, November 25th, 2018
+  Modified by Wes Furuya @ SparkFun Electronics, February 5th, 2019
 
-  The Qwiic Joystick is a I2C controlled encoder
+  The Qwiic Joystick is a I2C controlled analog joystick
 
   https://github.com/sparkfun/SparkFun_Qwiic_Joystick_Arduino_Library
 
   Development environment specifics:
-  Arduino IDE 1.8.7
+  Arduino IDE 1.8.5
 
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -29,9 +30,6 @@
 
 #define QWIIC_JOYSTICK_ADDR 0x20 //7-bit unshifted default I2C Address
 
-const byte statusButtonClickedBit = 2;
-const byte statusButtonPressedBit = 1;
-
 //Map to the various registers on the Joystick
 enum encoderRegisters {
   JOYSTICK_ID = 0x00,
@@ -42,7 +40,7 @@ enum encoderRegisters {
   JOYSTICK_Y_MSB = 0x05,
   JOYSTICK_Y_LSB = 0x06,
   JOYSTICK_BUTTON = 0x07,
-  JOYSTICK_STATUS = 0x08, //2 - button clicked, 1 - button pressed, 0 - encoder moved
+  JOYSTICK_STATUS = 0x08, //1 - button clicked
   JOYSTICK_CHANGE_ADDRESS = 0x09,
 };
 
@@ -57,9 +55,9 @@ class JOYSTICK {
   int16_t getVertical(); //Returns the number of indents the user has turned the knob
 		
 	byte getButton(); //Returns true if knob has been twisted
-	boolean checkButton(); //Return true if button is currently pressed.
+	byte checkButton(); //Return true if button is currently pressed.
 	
-	char16_t getVersion(); //Returns a two byte Major/Minor version number
+	String getVersion(); //Returns a two byte Major/Minor version number
 	
 	void setI2CAddress(uint8_t newAddress); //Change the I2C address to newAddress
 	

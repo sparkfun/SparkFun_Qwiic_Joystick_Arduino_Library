@@ -1,17 +1,18 @@
 /*
-  This is a library written for the SparkFun Qwiic Joystick Encoder
+  This is a library written for the SparkFun Qwiic Joystick
   SparkFun sells these at its website: www.sparkfun.com
   Do you like this library? Help support SparkFun. Buy a board!
-  https://www.sparkfun.com/products/15083
+  https://www.sparkfun.com/products/15168
 
   Written by Nathan Seidle @ SparkFun Electronics, November 25th, 2018
+  Modified by Wes Furuya @ SparkFun Electronics, February 5th, 2019
 
-  The Qwiic Joystick is a I2C controlled encoder
+  The Qwiic Joystick is a I2C controlled analog joystick
 
   https://github.com/sparkfun/SparkFun_Qwiic_Joystick_Arduino_Library
 
   Development environment specifics:
-  Arduino IDE 1.8.7
+  Arduino IDE 1.8.5
 
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -71,7 +72,6 @@ int16_t JOYSTICK::getHorizontal()
   return ((X_MSB<<2) | X_LSB);
 }
 
-
 //Returns the number of indents the user has twisted the knob
 int16_t JOYSTICK::getVertical()
 {
@@ -90,24 +90,23 @@ byte JOYSTICK::getButton()
 }
 
 //Returns true if button is currently being pressed
-boolean JOYSTICK::checkButton()
+byte JOYSTICK::checkButton()
 {
   byte status = readRegister(JOYSTICK_STATUS);
-  boolean pressed = status & (1<<statusButtonPressedBit);
+  
+  writeRegister(JOYSTICK_STATUS, 0x00); //We've read this status bit, now clear it
 
-  writeRegister(JOYSTICK_STATUS, status & ~(1<<statusButtonPressedBit)); //We've read this status bit, now clear it
-
-  return(pressed);
+  return(status);
 }
 
 
 //Returns a two byte Major/Minor version number
-char16_t JOYSTICK::getVersion()
+String JOYSTICK::getVersion()
 {
-  uint8_t Maj = readRegister(JOYSTICK_VERSION1);
-  uint8_t Min = readRegister(JOYSTICK_VERSION2);
+  uint8_t Major = readRegister(JOYSTICK_VERSION1);
+  uint8_t Minor = readRegister(JOYSTICK_VERSION2);
 
-  return(sprintf("%d", Maj) + "." + sprintf("%d", Min));
+  return(String(Major) + "." + String(Minor));
 }
 
 
