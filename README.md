@@ -1,7 +1,7 @@
 SparkFun Qwiic Joystick Arduino Library
 ===========================================================
 
-![SparkFun Qwiic Joystick](tps://cdn.sparkfun.com/assets/parts/1/3/5/5/8/15168-SparkFun_Qwiic_Joystick-01.jpg)
+![SparkFun Qwiic Joystick](https://cdn.sparkfun.com/assets/parts/1/3/5/5/8/15168-SparkFun_Qwiic_Joystick-01.jpg)
 
 [*SparkFun Qwiic Joystick (DEV-15168)*](https://www.sparkfun.com/products/15168)
 
