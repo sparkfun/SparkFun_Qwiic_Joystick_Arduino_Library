@@ -41,7 +41,8 @@ enum encoderRegisters {
   JOYSTICK_Y_LSB = 0x06,
   JOYSTICK_BUTTON = 0x07,
   JOYSTICK_STATUS = 0x08, //1 - button clicked
-  JOYSTICK_CHANGE_ADDRESS = 0x09,
+  JOYSTICK_I2C_LOCK = 0x09,
+  JOYSTICK_CHANGE_ADDRESS = 0x0A,
 };
 
 class JOYSTICK {

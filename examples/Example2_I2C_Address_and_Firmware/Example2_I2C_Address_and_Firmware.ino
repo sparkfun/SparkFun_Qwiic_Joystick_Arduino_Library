@@ -87,11 +87,12 @@ void loop() {
         Serial.print("0");
       }
       Serial.print(Address, HEX); //Prints out new Address value in HEX
-      joystick.begin(); //Starts I2C w/ new Address (Library stores new I2C address in .setI2cAddress instruction)
+      //joystick.begin(); //Starts I2C w/ new Address (Library stores new I2C address in .setI2cAddress instruction)
       
       //Print out Firmware Version to double check address change
       Serial.print(" Firmware: v");
       Serial.println(joystick.getVersion());
+
     }
     else
     {

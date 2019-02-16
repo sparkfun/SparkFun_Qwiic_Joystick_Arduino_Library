@@ -58,10 +58,13 @@ boolean JOYSTICK::isConnected()
 //Change the I2C address of this address to newAddress
 void JOYSTICK::setI2CAddress(uint8_t newAddress)
 {
+  writeRegister(JOYSTICK_I2C_LOCK, 0x13);
   writeRegister(JOYSTICK_CHANGE_ADDRESS, newAddress);
   
   //Once the address is changed, we need to change it in the library
   _deviceAddress = newAddress;
+
+  begin(Wire, newAddress);
 }
 
 //Returns the number of indents the user has twisted the knob
@@ -126,7 +129,7 @@ uint8_t JOYSTICK::readRegister(uint8_t addr)
     return (_i2cPort->read());
   }
 
-  //Serial.println("No ack!");
+  //Serial.println("No read ack!");
   return (0); //Device failed to respond
 }
 
@@ -139,7 +142,7 @@ boolean JOYSTICK::writeRegister(uint8_t addr, uint8_t val)
   _i2cPort->write(val);
   if (_i2cPort->endTransmission() != 0)
   {
-    //Serial.println("No ack!");
+    //Serial.println("No write ack!");
     return (false); //Device failed to ack
   }
 

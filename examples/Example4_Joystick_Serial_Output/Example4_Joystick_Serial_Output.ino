@@ -69,7 +69,7 @@ void loop() {
 
     if (B == 0)
     {
-        Serial.print("Button");
+        Serial.println("Button");
     }
 
 
