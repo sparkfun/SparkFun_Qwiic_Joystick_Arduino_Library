@@ -67,7 +67,7 @@ void JOYSTICK::setI2CAddress(uint8_t newAddress)
   begin(Wire, newAddress);
 }
 
-//Returns the number of indents the user has twisted the knob
+//Returns the 10-bit ADC value of the joystick horizontal position
 int16_t JOYSTICK::getHorizontal()
 {
   int16_t X_MSB = readRegister(JOYSTICK_X_MSB);
@@ -75,7 +75,7 @@ int16_t JOYSTICK::getHorizontal()
   return ((X_MSB<<2) | X_LSB);
 }
 
-//Returns the number of indents the user has twisted the knob
+//Returns the 10-bit ADC value of the joystick vertical position
 int16_t JOYSTICK::getVertical()
 {
   int16_t Y_MSB = readRegister(JOYSTICK_Y_MSB);
@@ -83,7 +83,7 @@ int16_t JOYSTICK::getVertical()
   return ((Y_MSB<<2) | Y_LSB);
 }
 
-//Returns true if button is currently being pressed
+//Returns 0 button is currently being pressed
 byte JOYSTICK::getButton()
 {
   byte button = readRegister(JOYSTICK_BUTTON);
@@ -92,7 +92,8 @@ byte JOYSTICK::getButton()
   return(button);
 }
 
-//Returns true if button is currently being pressed
+//Returns true if button was pressed between reads of .getButton() or .checkButton()
+//the register is then cleared after read.
 byte JOYSTICK::checkButton()
 {
   byte status = readRegister(JOYSTICK_STATUS);
@@ -103,7 +104,7 @@ byte JOYSTICK::checkButton()
 }
 
 
-//Returns a two byte Major/Minor version number
+//Returns a string of the firmware version number
 String JOYSTICK::getVersion()
 {
   uint8_t Major = readRegister(JOYSTICK_VERSION1);
