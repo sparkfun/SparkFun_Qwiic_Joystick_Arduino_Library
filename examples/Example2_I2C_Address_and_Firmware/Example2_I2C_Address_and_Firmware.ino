@@ -59,7 +59,7 @@ void loop() {
     Serial.flush(); //Clears buffer
     while (Serial.available() == 0) delay(20); //Waits for entry
     int len = Serial.readBytes(newAddress,5); //Takes entry as a stream of bytes
-    Serial.print("Address: 0x");
+    
     // Serial.println(len);
 
     //Converts ASCII char to DEC (Address)
@@ -79,25 +79,10 @@ void loop() {
     Address = ((byte)newAddress[0]-48)*100+((byte)newAddress[1]-48)*10+((byte)newAddress[2]-48);
     }
     
-    if (8 <= Address && Address <= 119)
-    {
-      joystick.setI2CAddress(Address); //Sets new I2C address
-      if (Address < 16)
-      {
-        Serial.print("0");
-      }
-      Serial.print(Address, HEX); //Prints out new Address value in HEX
-      //joystick.begin(); //Starts I2C w/ new Address (Library stores new I2C address in .setI2cAddress instruction)
+    joystick.setI2CAddress(Address); //Sets new I2C address
       
-      //Print out Firmware Version to double check address change
-      Serial.print(" Firmware: v");
-      Serial.println(joystick.getVersion());
-
-    }
-    else
-    {
-      Serial.println();
-      Serial.println("ERROR: Address outside 8-119 range");
-    }
+    //Print out Firmware Version to double check address change
+    Serial.print(" Firmware: v");
+    Serial.println(joystick.getVersion());
 
 }

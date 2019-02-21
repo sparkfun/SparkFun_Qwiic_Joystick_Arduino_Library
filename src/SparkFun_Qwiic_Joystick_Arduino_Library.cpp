@@ -32,8 +32,8 @@ JOYSTICK::JOYSTICK()
 
 }
 
-//Initializes the sensor with basic settings
-//Returns false if sensor is not detected
+//Initializes the I2C connection
+//Returns false if board is not detected
 boolean JOYSTICK::begin(TwoWire &wirePort, uint8_t deviceAddress)
 {
   _i2cPort = &wirePort;
@@ -58,29 +58,51 @@ boolean JOYSTICK::isConnected()
 //Change the I2C address of this address to newAddress
 void JOYSTICK::setI2CAddress(uint8_t newAddress)
 {
-  writeRegister(JOYSTICK_I2C_LOCK, 0x13);
-  writeRegister(JOYSTICK_CHANGE_ADDRESS, newAddress);
-  
-  //Once the address is changed, we need to change it in the library
-  _deviceAddress = newAddress;
+  if (8 <= newAddress && newAddress <= 119)
+  {
+    writeRegister(JOYSTICK_CHANGE_ADDRESS, newAddress);
+    //delay(50);
+    writeRegister(JOYSTICK_I2C_LOCK, 0x13);
+    //delay(50);
+    _i2cPort->end();
+    delay(50);
 
-  begin(Wire, newAddress);
+    //Once the address is changed, we need to change it in the library
+    _deviceAddress = newAddress;
+
+    if (begin(Wire, newAddress) == true)
+    {
+      Serial.print("Address: 0x");
+      if (newAddress < 16) Serial.print("0");
+      Serial.print(newAddress, HEX); //Prints out new Address value in HEX
+    }
+    else
+    {
+      Serial.print("No connect");
+    }
+  }
+  else
+  {
+    Serial.println();
+    Serial.println("ERROR: Address outside 8-119 range");
+  }
+  
 }
 
 //Returns the 10-bit ADC value of the joystick horizontal position
-int16_t JOYSTICK::getHorizontal()
+uint16_t JOYSTICK::getHorizontal()
 {
-  int16_t X_MSB = readRegister(JOYSTICK_X_MSB);
-  int16_t X_LSB = readRegister(JOYSTICK_X_LSB);
-  return ((X_MSB<<2) | X_LSB);
+  uint16_t X_MSB = readRegister(JOYSTICK_X_MSB);
+  uint16_t X_LSB = readRegister(JOYSTICK_X_LSB);
+  return ((X_MSB<<8) | X_LSB)>>6;
 }
 
 //Returns the 10-bit ADC value of the joystick vertical position
-int16_t JOYSTICK::getVertical()
+uint16_t JOYSTICK::getVertical()
 {
-  int16_t Y_MSB = readRegister(JOYSTICK_Y_MSB);
-  int16_t Y_LSB = readRegister(JOYSTICK_Y_LSB);
-  return ((Y_MSB<<2) | Y_LSB);
+  uint16_t Y_MSB = readRegister(JOYSTICK_Y_MSB);
+  uint16_t Y_LSB = readRegister(JOYSTICK_Y_LSB);
+  return ((Y_MSB<<8) | Y_LSB)>>6;
 }
 
 //Returns 0 button is currently being pressed
@@ -92,7 +114,7 @@ byte JOYSTICK::getButton()
   return(button);
 }
 
-//Returns true if button was pressed between reads of .getButton() or .checkButton()
+//Returns 1 if button was pressed between reads of .getButton() or .checkButton()
 //the register is then cleared after read.
 byte JOYSTICK::checkButton()
 {

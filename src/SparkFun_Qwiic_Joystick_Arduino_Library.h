@@ -33,16 +33,16 @@
 //Map to the various registers on the Joystick
 enum encoderRegisters {
   JOYSTICK_ID = 0x00,
-  JOYSTICK_VERSION1 = 0x01,
-  JOYSTICK_VERSION2 = 0x02,
-  JOYSTICK_X_MSB = 0x03,
-  JOYSTICK_X_LSB = 0x04,
-  JOYSTICK_Y_MSB = 0x05,
-  JOYSTICK_Y_LSB = 0x06,
-  JOYSTICK_BUTTON = 0x07,
-  JOYSTICK_STATUS = 0x08, //1 - button clicked
-  JOYSTICK_I2C_LOCK = 0x09,
-  JOYSTICK_CHANGE_ADDRESS = 0x0A,
+  JOYSTICK_VERSION1, // 0x01
+  JOYSTICK_VERSION2, // 0x02
+  JOYSTICK_X_MSB, // 0x03
+  JOYSTICK_X_LSB, // 0x04
+  JOYSTICK_Y_MSB, // 0x05
+  JOYSTICK_Y_LSB, // 0x06
+  JOYSTICK_BUTTON, // 0x07
+  JOYSTICK_STATUS, // 0x08 //1 - button clicked
+  JOYSTICK_I2C_LOCK, // 0x09
+  JOYSTICK_CHANGE_ADDRESS, // 0x0A
 };
 
 class JOYSTICK {
@@ -52,15 +52,15 @@ class JOYSTICK {
     boolean begin(TwoWire &wirePort = Wire, uint8_t deviceAddress = QWIIC_JOYSTICK_ADDR);
     boolean isConnected(); //Checks if sensor ack's the I2C request
 	
-	int16_t getHorizontal(); //Returns the number of indents the user has turned the knob
-  int16_t getVertical(); //Returns the number of indents the user has turned the knob
+	uint16_t getHorizontal(); //Returns the number of indents the user has turned the knob
+  uint16_t getVertical(); //Returns the number of indents the user has turned the knob
 		
 	byte getButton(); //Returns true if knob has been twisted
 	byte checkButton(); //Return true if button is currently pressed.
 	
 	String getVersion(); //Returns a two byte Major/Minor version number
 	
-	void setI2CAddress(uint8_t newAddress); //Change the I2C address to newAddress
+	void setI2CAddress(uint8_t newAddress); //Change the I2C address to newAddress (Prints new address over serial)
 	
   private:
     TwoWire *_i2cPort;
