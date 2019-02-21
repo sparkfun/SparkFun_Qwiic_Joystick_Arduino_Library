@@ -53,7 +53,7 @@ class JOYSTICK {
     boolean isConnected(); //Checks if sensor ack's the I2C request
 	
 	uint16_t getHorizontal(); //Returns the number of indents the user has turned the knob
-  uint16_t getVertical(); //Returns the number of indents the user has turned the knob
+    uint16_t getVertical(); //Returns the number of indents the user has turned the knob
 		
 	byte getButton(); //Returns true if knob has been twisted
 	byte checkButton(); //Return true if button is currently pressed.

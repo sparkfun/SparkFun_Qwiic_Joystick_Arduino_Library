@@ -60,12 +60,10 @@ void JOYSTICK::setI2CAddress(uint8_t newAddress)
 {
   if (8 <= newAddress && newAddress <= 119)
   {
-    writeRegister(JOYSTICK_CHANGE_ADDRESS, newAddress);
-    //delay(50);
     writeRegister(JOYSTICK_I2C_LOCK, 0x13);
-    //delay(50);
+    writeRegister(JOYSTICK_CHANGE_ADDRESS, newAddress);
     _i2cPort->end();
-    delay(50);
+    delay(100);
 
     //Once the address is changed, we need to change it in the library
     _deviceAddress = newAddress;
@@ -78,7 +76,7 @@ void JOYSTICK::setI2CAddress(uint8_t newAddress)
     }
     else
     {
-      Serial.print("No connect");
+      Serial.println("Address Change Failure");
     }
   }
   else
@@ -132,7 +130,7 @@ String JOYSTICK::getVersion()
   uint8_t Major = readRegister(JOYSTICK_VERSION1);
   uint8_t Minor = readRegister(JOYSTICK_VERSION2);
 
-  return(String(Major) + "." + String(Minor));
+  return("v" + String(Major) + "." + String(Minor));
 }
 
 
@@ -146,13 +144,10 @@ uint8_t JOYSTICK::readRegister(uint8_t addr)
     //Serial.println("No ack!");
     return (0); //Device failed to ack
   }
-
   _i2cPort->requestFrom((uint8_t)_deviceAddress, (uint8_t)1);
   if (_i2cPort->available()) {
     return (_i2cPort->read());
   }
-
-  //Serial.println("No read ack!");
   return (0); //Device failed to respond
 }
 
