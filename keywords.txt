@@ -18,10 +18,10 @@ setI2CAddress	KEYWORD2
 
 getVersion	    KEYWORD2
 
-getHorizontal   KEYWORD2
+getHorizontal	KEYWORD2
 getVertical	    KEYWORD2
 getButton	    KEYWORD2
-checkButton     KEYWORD2
+checkButton	KEYWORD2
 
 isConnected	    KEYWORD2
 
