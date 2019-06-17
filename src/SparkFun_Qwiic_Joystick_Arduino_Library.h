@@ -31,7 +31,7 @@
 #define QWIIC_JOYSTICK_ADDR 0x20 //7-bit unshifted default I2C Address
 
 //Map to the various registers on the Joystick
-enum encoderRegisters {
+enum joystickRegisters {
   JOYSTICK_ID = 0x00,
   JOYSTICK_VERSION1, // 0x01
   JOYSTICK_VERSION2, // 0x02
