@@ -53,14 +53,14 @@ class JOYSTICK {
     boolean isConnected(); //Checks if sensor ack's the I2C request
 	
 	uint16_t getHorizontal(); //Returns the number of indents the user has turned the knob
-    uint16_t getVertical(); //Returns the number of indents the user has turned the knob
+  uint16_t getVertical(); //Returns the number of indents the user has turned the knob
 		
 	byte getButton(); //Returns true if knob has been twisted
 	byte checkButton(); //Return true if button is currently pressed.
 	
 	String getVersion(); //Returns a two byte Major/Minor version number
 	
-	void setI2CAddress(uint8_t newAddress); //Change the I2C address to newAddress (Prints new address over serial)
+	boolean setI2CAddress(uint8_t newAddress); //Change the I2C address to newAddress (Prints new address over serial)
 	
   private:
     TwoWire *_i2cPort;

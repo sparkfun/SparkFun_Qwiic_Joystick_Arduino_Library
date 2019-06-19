@@ -41,8 +41,9 @@ void setup() {
 
   if(joystick.begin(Wire, Address) == false)
   {
-    Serial.println("Joystick does not appear to be connected. Please check wiring. Freezing...");
-    while(1);
+    Serial.println("Joystick does not appear to be connected.");
+    Serial.println("Initiating scan for devices. (If scan fails or no device is found, please check wiring.)");
+    I2Cscan();
   }
   else
   {
@@ -60,8 +61,6 @@ void loop() {
     while (Serial.available() == 0) delay(20); //Waits for entry
     int len = Serial.readBytes(newAddress,5); //Takes entry as a stream of bytes
     
-    // Serial.println(len);
-
     //Converts ASCII char to DEC (Address)
     if (len==1)
     {
@@ -79,10 +78,60 @@ void loop() {
     Address = ((byte)newAddress[0]-48)*100+((byte)newAddress[1]-48)*10+((byte)newAddress[2]-48);
     }
     
-    joystick.setI2CAddress(Address); //Sets new I2C address
-      
-    //Print out Firmware Version to double check address change
-    Serial.print(" Firmware: v");
-    Serial.println(joystick.getVersion());
+    if (joystick.setI2CAddress(Address) == true) //Sets new I2C address
+    {
+      //Print out Firmware Version to double check address change
+      Serial.print("Firmware: ");
+      Serial.println(joystick.getVersion());
+    }
+    else
+    {
+      I2Cscan();
+    }
+  }
 
+
+void I2Cscan() {
+  Wire.end();
+  byte error, address;
+  int nDevices;
+  
+  Serial.println("Scanning for device...");
+  
+  nDevices = 0;
+  for (address = 1; address < 127; address++ )
+  {
+    // The i2c_scanner uses the return value of
+    // the Write.endTransmisstion to see if
+    // a device did acknowledge to the address.
+    Wire.beginTransmission(address);
+    error = Wire.endTransmission();
+    
+    if (error == 0)
+    {
+      Serial.print("I2C device found at address 0x");
+      if (address < 16)
+        Serial.print("0");
+      Serial.print(address, HEX);
+      Serial.println("  !");
+      
+      nDevices++;
+      
+      Wire.end();
+      if (joystick.begin(Wire, address) == true)
+      {
+        Serial.print("Connected... Version: ");
+        Serial.println(joystick.getVersion());
+      }
+      break;
+    }
+    else if (error == 4)
+    {
+      Serial.print("Unknown error at address 0x");
+      if (address < 16)
+        Serial.print("0");
+      Serial.println(address, HEX);
+    }
+  }
+  if (nDevices == 0) Serial.println("No I2C devices found\n");
 }

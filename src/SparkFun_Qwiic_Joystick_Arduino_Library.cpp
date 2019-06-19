@@ -56,14 +56,16 @@ boolean JOYSTICK::isConnected()
 }
 
 //Change the I2C address of this address to newAddress
-void JOYSTICK::setI2CAddress(uint8_t newAddress)
+boolean JOYSTICK::setI2CAddress(uint8_t newAddress)
 {
   if (8 <= newAddress && newAddress <= 119)
   {
     writeRegister(JOYSTICK_I2C_LOCK, 0x13);
     writeRegister(JOYSTICK_CHANGE_ADDRESS, newAddress);
-    _i2cPort->end();
-    delay(100);
+    
+    // #if !defined(ESP_PLATFORM) && !defined(ESP8266)
+    //   _i2cPort->end();
+    // #endif
 
     //Once the address is changed, we need to change it in the library
     _deviceAddress = newAddress;
@@ -73,16 +75,20 @@ void JOYSTICK::setI2CAddress(uint8_t newAddress)
       Serial.print("Address: 0x");
       if (newAddress < 16) Serial.print("0");
       Serial.print(newAddress, HEX); //Prints out new Address value in HEX
+      Serial.print(" ");
+      return (true);
     }
     else
     {
       Serial.println("Address Change Failure");
+      return (false);
     }
   }
   else
   {
     Serial.println();
-    Serial.println("ERROR: Address outside 8-119 range");
+    Serial.println("ERROR: Input outside available address range (8-119)");
+    return (false);
   }
   
 }
@@ -148,7 +154,11 @@ uint8_t JOYSTICK::readRegister(uint8_t addr)
   if (_i2cPort->available()) {
     return (_i2cPort->read());
   }
-  return (0); //Device failed to respond
+  else
+  {
+    //Serial.println("No ack!");
+    return (0); //Device failed to respond
+  }
 }
 
 
@@ -163,6 +173,8 @@ boolean JOYSTICK::writeRegister(uint8_t addr, uint8_t val)
     //Serial.println("No write ack!");
     return (false); //Device failed to ack
   }
+
+  delay(30); // allow EPROM time to store value
 
   return (true);
 }
